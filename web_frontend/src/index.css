@@ -1,10 +1,12 @@
+@import url('https://googleapis.com');
+
 @import "tailwindcss";
 
 :root {
   --text: #6b6375;
   --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
+  --bg: #E2E2E2;
+  --border: #2e303a;
   --code-bg: #f4f3ec;
   --accent: #aa3bff;
   --accent-bg: rgba(170, 59, 255, 0.1);
@@ -26,6 +28,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', sans-serif;
 
   @media (max-width: 1024px) {
     font-size: 16px;
@@ -34,9 +37,9 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
+    --text: #000000;
+    --text-h: #000000;
+    --bg: #f9f9f9;
     --border: #2e303a;
     --code-bg: #1f2028;
     --accent: #c084fc;
@@ -52,12 +55,15 @@
   }
 }
 
+@utility form-element {
+  @apply flex flex-col text-lg w-full;
+}
+
 #root {
-  width: 1126px;
   max-width: 100%;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -68,22 +74,6 @@ body {
   margin: 0;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
 h2 {
   font-size: 24px;
   line-height: 118%;
@@ -110,4 +100,14 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: large;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  background-color: #fff;
+  margin-top: 5px;
 }
