@@ -1,4 +1,4 @@
-import { useState, useRef, type ChangeEvent, type FormEvent } from "react";
+import { useState, useRef, type ChangeEvent } from "react";
 
 const FIELD_ORDER = ["username", "email", "password", "address"] as const;
 type FieldName = (typeof FIELD_ORDER)[number];
@@ -85,7 +85,7 @@ export default function Register() {
         return !firstInvalid;
     };
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: any) => {
         e.preventDefault();
         if (validateForm()) {
         console.log("Dados validados com sucesso:", formData);
@@ -94,13 +94,13 @@ export default function Register() {
     };
 
     return (
-        <div className="flex w-full flex-col justify-center">
+        <div className="flex w-full flex-col justify-center p-7">
             <div className="mx-auto w-full max-w-md text-left">
                 <div className="flex flex-col md:text-center md:items-center md:justify-center w-full">
                     <h1 className="font-black text-5xl">CRIAR <br className="md:hidden"/>CONTA</h1>
-                    <div className="w-18 h-2 bg-black mb-4 mt-2"></div>
+                    <div className="w-18 h-2 bg-black mb-10 mt-2"></div>
                 </div>
-                <form action="" id="register-form" onSubmit={handleSubmit} className="flex flex-col gap-6">
+                <form noValidate action="" id="register-form" onSubmit={handleSubmit} className="flex flex-col gap-2">
                     <div className="form-element">
                         <label htmlFor="username">NOME DE USUÁRIO</label>
                         <input
@@ -120,7 +120,7 @@ export default function Register() {
                     </div>
                     <div className="form-element">
                         <label htmlFor="email">E-MAIL</label>
-                        <input id="email" type="email" placeholder="nome@exemplo.com.br" 
+                        <input  id="email" type="email" placeholder="nome@exemplo.com.br" 
                         name="email"
                         value={formData.email}
                         onChange={handleChangeOnForm}
