@@ -12,7 +12,6 @@ class Validators {
   static Validator email(String msg) =>
       (v) => EmailValidator.validate(v?.trim() ?? '') ? null : msg;
 
-  /// Runs validators in order, returns the first error.
   static Validator compose(List<Validator> validators) => (v) {
         for (final validate in validators) {
           final error = validate(v);

@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
+
 import 'core/theme/app_theme.dart';
 import 'features/register/register_page.dart';
 
-void main() => runApp(const MyApp());
+import 'package:graphql_flutter/graphql_flutter.dart';
+
+import 'graphql_config.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final client = GraphQLConfig.initializeClient();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Ecosol Digital',
-      theme: AppTheme.light,
-      home: const RegisterPage(),
+    return GraphQLProvider(
+      client: client,
+      child: MaterialApp(
+        title: 'Ecosol Digital',
+        theme: AppTheme.light,
+        home: const RegisterPage(),
+      ),
     );
   }
 }

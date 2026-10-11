@@ -7,7 +7,7 @@ class AppTheme {
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
-            fixedSize: const Size(200, 60),
+            fixedSize: const Size(450, 60),
             padding: const EdgeInsets.symmetric(horizontal:16, vertical:12),
             elevation: 0,
             shape: const LinearBorder(),
