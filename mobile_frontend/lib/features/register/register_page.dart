@@ -45,6 +45,10 @@ class _RegisterPageState extends State<RegisterPage> {
         options: MutationOptions(
           document: gql(createUserMutation),
           onCompleted: (dynamic resultData) {
+            if (resultData == null) {
+              return;
+            }
+
             print("Cadastro realizado com sucesso.");
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Cadastro realizado com sucesso.')),

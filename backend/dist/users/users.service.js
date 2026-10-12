@@ -56,6 +56,12 @@ let UsersService = class UsersService {
         this.usersRepository = usersRepository;
     }
     async create(createUserInput) {
+        const extinguisUser = await this.usersRepository.findOne({
+            where: { email: createUserInput.email }
+        });
+        if (extinguisUser) {
+            throw new common_1.ConflictException("Este e-mail já foi cadastrado.");
+        }
         const salt = 10;
         const hashed = await bcrypt.hash(createUserInput.passwordHash, salt);
         const newUser = this.usersRepository.create({
