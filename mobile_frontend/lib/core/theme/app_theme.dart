@@ -10,7 +10,6 @@ class AppTheme {
         fontWeight: FontWeight(700),
       ),
     ),
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.black,

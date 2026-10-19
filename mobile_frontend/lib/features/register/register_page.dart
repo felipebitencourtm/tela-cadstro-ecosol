@@ -210,7 +210,13 @@ class _RegisterPageState extends State<RegisterPage> {
                             });
                           } // deu certo
                         },
-                        child: const Text('FINALIZAR CADASTRO'),
+                        child: const Text(
+                          'FINALIZAR CADASTRO',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight(700),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 12),
 
