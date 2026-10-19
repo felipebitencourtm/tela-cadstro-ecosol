@@ -17,6 +17,11 @@ class _RegisterPageState extends State<RegisterPage> {
   final _password = TextEditingController();
   final _address = TextEditingController();
 
+  final _usernameFocus = FocusNode();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+  final _addressFocus = FocusNode();
+
   final String createUserMutation = """
     mutation CreateUser(\$createUserInput: CreateUserInput!) {
       createUser(createUserInput: \$createUserInput) {
@@ -28,12 +33,56 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   """;
 
+  final _usernameValidator = Validators.compose([
+    Validators.required('O nome de usuário é obrigatório.'),
+    Validators.maxLength(
+      100,
+      'O nome de usuário deve ter no máximo 100 caracteres.',
+    ),
+  ]);
+  final _emailValidator = Validators.compose([
+    Validators.required('O e-mail é obrigatório.'),
+    Validators.email('Formato de e-mail inválido.'),
+    Validators.maxLength(250, 'O e-mail deve ter no máximo 250 caracteres.'),
+  ]);
+  final _passwordValidator = Validators.compose([
+    Validators.required('A senha é obrigatória.'),
+    Validators.maxLength(50, 'A senha deve ter no máximo 50 caracteres.'),
+  ]);
+  final _addressValidator = Validators.compose([
+    Validators.required('O endereço é obrigatório.'),
+    Validators.maxLength(250, 'O endereço deve ter no máximo 250 caracteres.'),
+  ]);
+
+  bool _validateAndFocus() {
+    final isValid = _formKey.currentState!.validate();
+    if (isValid) return true;
+
+    final fields = [
+      (_usernameFocus, _username, _usernameValidator),
+      (_emailFocus, _email, _emailValidator),
+      (_passwordFocus, _password, _passwordValidator),
+      (_addressFocus, _address, _addressValidator),
+    ];
+    for (final (node, controller, validator) in fields) {
+      if (validator(controller.text) != null) {
+        node.requestFocus();
+        break;
+      }
+    }
+    return false;
+  }
+
   @override
   void dispose() {
     _username.dispose();
     _email.dispose();
     _password.dispose();
     _address.dispose();
+    _usernameFocus.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    _addressFocus.dispose();
     super.dispose();
   }
 
@@ -108,15 +157,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             AppTextField(
                               controller: _username,
                               hint: 'Ex: usuario123',
-                              validator: Validators.compose([
-                                Validators.required(
-                                  'O nome de usuário é obrigatório.',
-                                ),
-                                Validators.maxLength(
-                                  100,
-                                  'O nome de usuário deve ter no máximo 100 caracteres.',
-                                ),
-                              ]),
+                              focusNode: _usernameFocus,
+                              validator: _usernameValidator,
                             ),
                             const Text(
                               "E-MAIL",
@@ -128,14 +170,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             AppTextField(
                               controller: _email,
                               hint: 'nome@exemplo.com.br',
-                              validator: Validators.compose([
-                                Validators.required('O e-mail é obrigatório.'),
-                                Validators.email('Formato de e-mail inválido.'),
-                                Validators.maxLength(
-                                  250,
-                                  'O e-mail deve ter no máximo 250 caracteres.',
-                                ),
-                              ]),
+                              focusNode: _emailFocus,
+                              validator: _emailValidator,
                             ),
                             const Text(
                               "SENHA",
@@ -147,13 +183,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             AppTextField(
                               controller: _password,
                               hint: '********',
-                              validator: Validators.compose([
-                                Validators.required('A senha é obrigatória.'),
-                                Validators.maxLength(
-                                  50,
-                                  'A senha deve ter no máximo 50 caracteres.',
-                                ),
-                              ]),
+                              focusNode: _passwordFocus,
+                              validator: _passwordValidator,
                               obscure: true,
                             ),
                             const Text(
@@ -166,15 +197,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             AppTextField(
                               controller: _address,
                               hint: 'Rua, Número, Complemento, Bairro',
-                              validator: Validators.compose([
-                                Validators.required(
-                                  'O endereço é obrigatório.',
-                                ),
-                                Validators.maxLength(
-                                  250,
-                                  'O endereço deve ter no máximo 250 caracteres.',
-                                ),
-                              ]),
+                              focusNode: _addressFocus,
+                              validator: _addressValidator,
                               multiline: true,
                             ),
                           ],
@@ -198,17 +222,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
+                          if (_validateAndFocus()) {
                             runMutation({
                               "createUserInput": {
                                 "username": _username.text,
                                 "email": _email.text,
                                 "address": _address.text,
-                                "passwordHash":
-                                    _password.text, // hash no backend
+                                "passwordHash": _password.text,
                               },
                             });
-                          } // deu certo
+                          }
                         },
                         child: const Text(
                           'FINALIZAR CADASTRO',

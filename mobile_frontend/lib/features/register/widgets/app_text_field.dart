@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../core/validators/validators.dart'; 
+
+import '../../../core/validators/validators.dart';
 
 class AppTextField extends StatelessWidget {
   const AppTextField({
@@ -7,6 +8,7 @@ class AppTextField extends StatelessWidget {
     required this.controller,
     required this.hint,
     required this.validator,
+    this.focusNode,
     this.obscure = false,
     this.multiline = false,
   });
@@ -14,6 +16,7 @@ class AppTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
   final Validator validator;
+  final FocusNode? focusNode;
   final bool obscure;
   final bool multiline;
 
@@ -21,6 +24,7 @@ class AppTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final field = TextFormField(
       controller: controller,
+      focusNode: focusNode,
       obscureText: obscure,
       validator: validator,
       maxLines: multiline ? null : 1,
@@ -29,8 +33,6 @@ class AppTextField extends StatelessWidget {
       decoration: InputDecoration(hintText: hint),
     );
 
-    return multiline
-        ? SizedBox(height: 160, child: field)
-        : field;
+    return multiline ? SizedBox(height: 160, child: field) : field;
   }
 }
