@@ -1,4 +1,5 @@
-import { useState, useRef, type ChangeEvent } from "react";
+import { useState, useRef, type ChangeEvent, type FormEvent } from "react";
+import { registerUser, ApiError } from "../api";
 
 const FIELD_ORDER = ["username", "email", "password", "address"] as const;
 type FieldName = (typeof FIELD_ORDER)[number];
@@ -18,6 +19,10 @@ address?: string;
 }
 
 export default function Register() {
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState<string | null>(null);
+
 
     const fieldRefs = useRef<
         Record<FieldName, HTMLInputElement | HTMLTextAreaElement | null>
@@ -85,12 +90,28 @@ export default function Register() {
         return !firstInvalid;
     };
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-        if (validateForm()) {
-        console.log("Dados validados com sucesso:", formData);
-        // api call
-    }
+        if (!validateForm()) return;
+
+        setIsSubmitting(true);
+        setSubmitError(null);
+
+        try {
+            const user = await registerUser(formData);
+            console.log("Usuário criado:", user);
+            alert("Cadastro realizado com sucesso."); // temporary; replace with a redirect later
+        } catch (err) {
+            console.error("Erro no cadastro:", err);
+            if (err instanceof ApiError && /already|exist|duplic|em uso/i.test(err.message)) {
+            setErrors({ email: "Este e-mail já está em uso." });
+            fieldRefs.current.email?.focus();
+            } else {
+            setSubmitError(err instanceof ApiError ? err.message : "Falha de conexão com o servidor.");
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -167,9 +188,16 @@ export default function Register() {
             </div>
 
             <div className="mx-auto w-full max-w-md mt-5 flex flex-col">
-                <button className="bg-black text-white w-full p-4 font-bold cursor-pointer" form="register-form" type="submit">
-                FINALIZAR CADASTRO
-                </button>
+                {submitError && (
+        <p role="alert" className="text-xs text-red-600 mb-2">{submitError}</p>
+    )}
+                <button className="bg-black text-white w-full p-4 font-bold cursor-pointer disabled:opacity-50"
+        form="register-form"
+        type="submit"
+        disabled={isSubmitting}
+        >
+        {isSubmitting ? "ENVIANDO..." : "FINALIZAR CADASTRO"}
+                        </button>
                 <div className="flex flex-row justify-between text-xs mt-3">
                     <p>PASSO 01/01</p>
                     <p className="font-bold">STATUS: PENDENTE</p>
