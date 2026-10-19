@@ -5,9 +5,9 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xF5F5F5F5),
       titleTextStyle: TextStyle(
-        fontSize: 20,
+        fontSize: 18,
         color: Colors.black,
-        fontWeight: FontWeight(800),
+        fontWeight: FontWeight(700),
       ),
     ),
     colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

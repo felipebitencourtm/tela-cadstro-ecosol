@@ -40,7 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ECOSOL DIGITAL')),
+      appBar: AppBar(title: const Text('ECOSOL DIGITAL'), centerTitle: true),
       body: Mutation(
         options: MutationOptions(
           document: gql(createUserMutation),
